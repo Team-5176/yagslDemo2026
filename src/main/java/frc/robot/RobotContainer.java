@@ -47,9 +47,10 @@ public class RobotContainer
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> driverXbox.getLeftY() * -1,
-                                                                () -> driverXbox.getLeftX() * -1)
-                                                            .withControllerRotationAxis(driverXbox::getRightX)
+                                                                () -> driverXbox.getLeftY() * 1,
+                                                                () -> driverXbox.getLeftX() * 1)
+                                                            // .withControllerRotationAxis(driverXbox::getRightX)
+                                                            .withControllerRotationAxis(() -> - driverXbox.getRightX())
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(true);
@@ -142,7 +143,8 @@ public class RobotContainer
 
     if (RobotBase.isSimulation())
     {
-      drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
+      // drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
+      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     } else
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
@@ -150,10 +152,10 @@ public class RobotContainer
 
     if (Robot.isSimulation())
     {
-      Pose2d target = new Pose2d(new Translation2d(1, 4),
-                                 Rotation2d.fromDegrees(90));
+      Pose2d target = new Pose2d(new Translation2d(3, 4),
+                                 Rotation2d.fromDegrees(0));
       //drivebase.getSwerveDrive().field.getObject("targetPose").setPose(target);
-      driveDirectAngleKeyboard.driveToPose(() -> target,
+      driveAngularVelocity.driveToPose(() -> target,
                                            new ProfiledPIDController(5,
                                                                      0,
                                                                      0,
@@ -164,23 +166,31 @@ public class RobotContainer
                                                                      new Constraints(Units.degreesToRadians(360),
                                                                                      Units.degreesToRadians(180))
                                            ));
-      driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+      driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(5, 3, new Rotation2d()))));
       //driverXbox.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
-      //driverXbox.button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
-      //                                               () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
+      driverXbox.a().whileTrue(Commands.runEnd(() -> driveAngularVelocity.driveToPoseEnabled(true),
+                                                    () -> driveAngularVelocity.driveToPoseEnabled(false)));
       
 
-//      driverXbox.b().whileTrue(
-//          drivebase.driveToPose(
-//              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-//                              );
+     driverXbox.b().whileTrue(
+         drivebase.driveToPose(
+             new Pose2d(new Translation2d(2, 4), Rotation2d.fromDegrees(30)))
+                             );
+         driverXbox.y().whileTrue(
+         drivebase.driveToPose(
+             new Pose2d(new Translation2d(2, 2), Rotation2d.fromDegrees(0)))
+                             );
+                                  driverXbox.x().whileTrue(
+         drivebase.driveToPose(
+             new Pose2d(new Translation2d(3, 1), Rotation2d.fromDegrees(0)))
+                             );
 
     }
     if (DriverStation.isTest())
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
-      driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       //driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
@@ -189,13 +199,13 @@ public class RobotContainer
     } else
     {
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+      // driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
       //driverXbox.y().onTrue(drivebase.driveToDistanceCommandDefer(drivebase::getPose, 2, 14));
-      driverXbox.y().whileTrue(drivebase.driveForward());
+      // driverXbox.y().whileTrue(drivebase.driveForward());
     }
 
   }
