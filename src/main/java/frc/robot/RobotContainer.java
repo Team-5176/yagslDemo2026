@@ -38,7 +38,7 @@ public class RobotContainer
   final         CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                                "swerve/neo"));
+                                                                                "swerve/swerveskeleton"));
 
   // Establish a Sendable Chooser that will be able to be sent to the SmartDashboard, allowing selection of desired auto
   private final SendableChooser<Command> autoChooser;
@@ -172,19 +172,20 @@ public class RobotContainer
                                                     () -> driveAngularVelocity.driveToPoseEnabled(false)));
       
 
-     driverXbox.b().whileTrue(
+    driverXbox.b().whileTrue(
          drivebase.driveToPose(
-             new Pose2d(new Translation2d(2, 4), Rotation2d.fromDegrees(30)))
+             new Pose2d(new Translation2d(14.41417166012385, 4.540819678033807), Rotation2d.fromDegrees(-164.62148386650534)))
                              );
-         driverXbox.y().whileTrue(
+    driverXbox.y().whileTrue(
          drivebase.driveToPose(
-             new Pose2d(new Translation2d(2, 2), Rotation2d.fromDegrees(0)))
+             new Pose2d(new Translation2d(14.384890592828347, 5.45948929296007), Rotation2d.fromDegrees(-139.06115231860775)))
                              );
-                                  driverXbox.x().whileTrue(
+      driverXbox.x().whileTrue(
          drivebase.driveToPose(
              new Pose2d(new Translation2d(3, 1), Rotation2d.fromDegrees(0)))
                              );
-
+// [14.41417166012385, 4.540819678033807, -164.62148386650534]
+// [14.384890592828347, 5.459489292960074, -139.06115231860775]
     }
     if (DriverStation.isTest())
     {
@@ -206,8 +207,20 @@ public class RobotContainer
       driverXbox.rightBumper().onTrue(Commands.none());
       //driverXbox.y().onTrue(drivebase.driveToDistanceCommandDefer(drivebase::getPose, 2, 14));
       // driverXbox.y().whileTrue(drivebase.driveForward());
+      driverXbox.b().whileTrue(
+         drivebase.driveToPose(
+             new Pose2d(new Translation2d(14.41417166012385, 4.540819678033807), Rotation2d.fromDegrees(-160.62148386650534)))
+                             );
+    driverXbox.y().whileTrue(
+         drivebase.driveToPose(
+             new Pose2d(new Translation2d(14.384890592828347, 5.45948929296007), Rotation2d.fromDegrees(-139.06115231860775)))
+                             );
+     driverXbox.x().whileTrue(
+         drivebase.driveToPose(
+             new Pose2d(new Translation2d(14.271725, 4.20057), Rotation2d.fromDegrees(-177.1775)))
+                             );
     }
-
+// [14.271774884147625, 4.200565795611057, -177.12409414906142]
   }
 
   /**
