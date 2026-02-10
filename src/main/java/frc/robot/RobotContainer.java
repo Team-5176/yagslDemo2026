@@ -47,8 +47,8 @@ public class RobotContainer
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> driverXbox.getLeftY() * 1,
-                                                                () -> driverXbox.getLeftX() * 1)
+                                                                () -> driverXbox.getLeftY() * -1,
+                                                                () -> driverXbox.getLeftX() * -1)
                                                             // .withControllerRotationAxis(driverXbox::getRightX)
                                                             .withControllerRotationAxis(() -> - driverXbox.getRightX())
                                                             .deadband(OperatorConstants.DEADBAND)
@@ -156,11 +156,11 @@ public class RobotContainer
                                  Rotation2d.fromDegrees(0));
       //drivebase.getSwerveDrive().field.getObject("targetPose").setPose(target);
       driveAngularVelocity.driveToPose(() -> target,
-                                           new ProfiledPIDController(5,
+                                           new ProfiledPIDController(1,
                                                                      0,
                                                                      0,
                                                                      new Constraints(5, 2)),
-                                           new ProfiledPIDController(5,
+                                           new ProfiledPIDController(1,
                                                                      0,
                                                                      0,
                                                                      new Constraints(Units.degreesToRadians(360),
@@ -174,16 +174,18 @@ public class RobotContainer
 
     driverXbox.b().whileTrue(
          drivebase.driveToPose(
-             new Pose2d(new Translation2d(14.41417166012385, 4.540819678033807), Rotation2d.fromDegrees(-164.62148386650534)))
+             new Pose2d(new Translation2d(14.41417166012385, 4.540819678033807), Rotation2d.fromDegrees(180)))
                              );
     driverXbox.y().whileTrue(
          drivebase.driveToPose(
-             new Pose2d(new Translation2d(14.384890592828347, 5.45948929296007), Rotation2d.fromDegrees(-139.06115231860775)))
+             new Pose2d(new Translation2d(14.384890592828347, 5.45948929296007), Rotation2d.fromDegrees(-140)))
                              );
+                             /*
       driverXbox.x().whileTrue(
          drivebase.driveToPose(
              new Pose2d(new Translation2d(3, 1), Rotation2d.fromDegrees(0)))
                              );
+                          */
 // [14.41417166012385, 4.540819678033807, -164.62148386650534]
 // [14.384890592828347, 5.459489292960074, -139.06115231860775]
     }
@@ -209,16 +211,16 @@ public class RobotContainer
       // driverXbox.y().whileTrue(drivebase.driveForward());
       driverXbox.b().whileTrue(
          drivebase.driveToPose(
-             new Pose2d(new Translation2d(14.41417166012385, 4.540819678033807), Rotation2d.fromDegrees(-160.62148386650534)))
+             new Pose2d(new Translation2d(14.5, 4), Rotation2d.fromDegrees(180)))
                              );
     driverXbox.y().whileTrue(
          drivebase.driveToPose(
-             new Pose2d(new Translation2d(14.384890592828347, 5.45948929296007), Rotation2d.fromDegrees(-139.06115231860775)))
+             new Pose2d(new Translation2d(14.5, 5.5), Rotation2d.fromDegrees(-150)))
                              );
-     driverXbox.x().whileTrue(
-         drivebase.driveToPose(
-             new Pose2d(new Translation2d(14.271725, 4.20057), Rotation2d.fromDegrees(-177.1775)))
-                             );
+    //  driverXbox.x().whileTrue(
+        //  drivebase.driveToPose(
+            //  new Pose2d(new Translation2d(14.271725, 4.20057), Rotation2d.fromDegrees(-177.1775)))
+                            //  );
     }
 // [14.271774884147625, 4.200565795611057, -177.12409414906142]
   }
